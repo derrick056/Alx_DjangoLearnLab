@@ -6,7 +6,7 @@
 from bookshelf.models import Book
 
 # Retrieve all books
-books = Book.objects.all()
+books = Book.objects.get.all()
 
 # Print the books
 print(books)
