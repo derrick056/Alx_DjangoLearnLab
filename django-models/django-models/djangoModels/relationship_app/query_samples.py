@@ -30,7 +30,6 @@ if __name__ == "__main__":
     author = Author.objects.create(name="J.K. Rowling")
     book1 = Book.objects.create(title="Harry Potter and the Sorcerer's Stone", author=author)
     book2 = Book.objects.create(title="Harry Potter and the Chamber of Secrets", author=author)
-    
     library = Library.objects.create(name="Central Library")
     library.books.add(book1, book2)
 
