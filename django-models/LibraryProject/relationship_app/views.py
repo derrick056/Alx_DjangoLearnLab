@@ -3,6 +3,8 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.detail import DetailView
+from django.views import View
+from django.contrib.auth.views import LoginView, LogoutView
 
 # Create your views here.
 from .models import Book
@@ -48,3 +50,16 @@ def user_register(request):
     else:
         form = UserCreationForm()
     return render(request, "relationship_app/register.html", {"form": form})
+
+# Class-Based User Registration View
+class RegisterView(View):
+    def get(self, request):
+        form = UserCreationForm()
+        return render(request, "relationship_app/register.html", {"form": form})
+
+    def post(self, request):
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            return redirect("login")  # Redirect to login page after successful registration
+        return render(request, "relationship_app/register.html", {"form": form})
