@@ -5,10 +5,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.detail import DetailView
 from django.views import View
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import user_passes_test
 
 # Create your views here.
 from .models import Book
 from .models import Library
+
 
 from django.shortcuts import render
 from .models import Book
@@ -63,3 +65,23 @@ class RegisterView(View):
             user = form.save()
             return redirect("login")  # Redirect to login page after successful registration
         return render(request, "relationship_app/register.html", {"form": form})
+
+def check_role(role):
+    def has_role(user):
+        return user.is_authenticated and user.userprofile.role == role
+    return user_passes_test(has_role)
+
+@check_role('Admin')
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+
+@check_role('Librarian')
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+@check_role('Member')
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
+
+def register(request):
+    return render(request, "relationship_app/register.html")
