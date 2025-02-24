@@ -8,7 +8,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import user_passes_test
 from .models import Book
 from django.contrib.auth.decorators import permission_required
-from .forms import BookForm, YourFormClass
+from .forms import BookForm
 
 
 # Create your views here.
@@ -18,6 +18,9 @@ from .models import Library
 
 from django.shortcuts import render
 from .models import Book
+
+def home(request):
+    return render(request, 'home.html')
 
 def list_books(request):
     books = Book.objects.all()  
