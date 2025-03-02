@@ -122,4 +122,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model configuration
-AUTH_USER_MODEL = 'relationship_app.CustomUser'  # Ensure 'bookshelf' is your actual app name
+AUTH_USER_MODEL = 'bookshelf.CustomUser'  # Ensure 'bookshelf' is your actual app name
