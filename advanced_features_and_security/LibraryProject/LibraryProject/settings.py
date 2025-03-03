@@ -23,9 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7d%0l+p0g6ewvj_n0t6cw&$4nzt8(%ehz_+$nqbhl-^^olfcfo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
+
+# Security settings
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = "DENY"  # Prevents clickjacking attacks
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevents MIME sniffing
+CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are sent over HTTPS
+SESSION_COOKIE_SECURE = True  # Ensures session cookies are sent over HTTPS
 
 # Application definition
 INSTALLED_APPS = [
@@ -37,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf',  # Your app containing CustomUser model
     'relationship_app',
+    'csp',  # Added django-csp for Content Security Policy
 ]
 
 MIDDLEWARE = [
@@ -47,7 +55,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',  # Added CSP middleware
 ]
+
+# Content Security Policy (CSP)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'")
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+CSP_IMG_SRC = ("'self'", "data:")
 
 ROOT_URLCONF = 'LibraryProject.urls'
 

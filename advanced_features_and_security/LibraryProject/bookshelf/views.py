@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseForbidden
 from .models import Book
+from django.http import HttpResponse
 
 @permission_required('bookshelf.can_view', raise_exception=True)
 def book_list(request):
@@ -38,3 +39,12 @@ def book_delete(request, book_id):
         book.delete()
         return redirect("book_list")
     return render(request, 'bookshelf/book_confirm_delete.html', {'book': book})
+def search_books(request):
+    query = request.GET.get('q', '')
+    books = Book.objects.filter(title__icontains=query)  # Prevents SQL injection
+    return render(request, "bookshelf/book_list.html", {"books": books})
+
+def my_view(request):
+    response = HttpResponse("Hello, secure world!")
+    response["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'"
+    return response
