@@ -1,3 +1,4 @@
+from django.utils.html import strip_tags
 from django import forms
 from .models import Book
 
@@ -8,6 +9,11 @@ class BookForm(forms.ModelForm):
 
     def clean_title(self):
         title = self.cleaned_data.get("title")
-        if "<script>" in title:
-            raise forms.ValidationError("Invalid input detected")
-        return title
+
+        # Remove any HTML tags
+        cleaned_title = strip_tags(title)
+
+        if title != cleaned_title:
+            raise forms.ValidationError("Invalid characters detected in the title.")
+        
+        return cleaned_title
