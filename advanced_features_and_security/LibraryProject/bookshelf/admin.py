@@ -1,16 +1,16 @@
 from django.contrib import admin
-
-# Register your models here.
-from django.contrib import admin
-from .models import Book
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import Book, CustomUser
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'publication_year')
+    list_display = ('title', 'author', 'get_published_date')  # Fixed column name
     search_fields = ('title', 'author')
-    list_filter = ('publication_year',)  # Add filter options
+    list_filter = ('published_date',)  # Fixed filter name
+
+    @admin.display(ordering='published_date', description='Published Date')
+    def get_published_date(self, obj):
+        return obj.published_date
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -20,9 +20,9 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal Info', {'fields': ('date_of_birth', 'profile_photo')}),
+        ('Personal Information', {'fields': ('date_of_birth', 'profile_photo')}),
         ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('Important Dates', {'fields': ('last_login', 'date_joined')}),
     )
 
     add_fieldsets = (

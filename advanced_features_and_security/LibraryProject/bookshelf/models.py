@@ -1,14 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
-class Book(models.Model):
-    title = models.CharField(max_length=200)
-    author = models.CharField(max_length=100)
-    publication_year = models.IntegerField()
-
-    def __str__(self):
-        return self.title
-
 class CustomUserManager(BaseUserManager):
     """Custom manager for CustomUser to use email instead of username."""
     
@@ -49,7 +41,24 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()  # Assign the custom manager
 
     USERNAME_FIELD = "email"  # Use email instead of username
-    REQUIRED_FIELDS = []  # Empty list or choose a required field
+    REQUIRED_FIELDS = []  # Keep empty or add required fields
 
     def __str__(self):
         return self.email
+    
+class Book(models.Model):
+    """Book model with custom permissions."""
+    title = models.CharField(max_length=255)
+    author = models.CharField(max_length=255)
+    published_date = models.DateField()
+
+    class Meta:
+        permissions = [
+            ("can_view", "Can view book"),
+            ("can_create", "Can create book"),
+            ("can_edit", "Can edit book"),
+            ("can_delete", "Can delete book"),
+        ]
+
+    def __str__(self):
+        return self.title
