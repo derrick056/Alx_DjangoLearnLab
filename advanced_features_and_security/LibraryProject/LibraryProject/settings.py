@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7d%0l+p0g6ewvj_n0t6cw&$4nzt8(%ehz_+$nqbhl-^^olfcfo'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']  # Add your domain
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'yourdomain.com,www.yourdomain.com').split(',')
 
 # Security settings
 SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
@@ -37,6 +37,9 @@ X_FRAME_OPTIONS = "DENY"  # Prevents clickjacking attacks
 SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevents MIME sniffing
 CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are sent over HTTPS
 SESSION_COOKIE_SECURE = True  # Ensures session cookies are sent over HTTPS
+
+# Ensure Django recognizes HTTPS requests behind a proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 INSTALLED_APPS = [
@@ -74,7 +77,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR, 'templates'
+            os.path.join(BASE_DIR, 'templates')  # Fixed path
         ],
         'APP_DIRS': True,
         'OPTIONS': {
