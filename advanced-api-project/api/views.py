@@ -4,7 +4,7 @@ from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
 
 # Explicit Create View for Books
-class Book CreateView(generics.CreateAPIView):
+class BookCreateView(generics.CreateAPIView):
     """
     API view to create a new book.
     Only authenticated users can create books.
@@ -14,7 +14,7 @@ class Book CreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 # Explicit Update View for Books
-class Book UpdateView(generics.UpdateAPIView):
+class BookUpdateView(generics.UpdateAPIView):
     """
     API view to update an existing book.
     Only authenticated users can update books.
@@ -24,7 +24,7 @@ class Book UpdateView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 # Explicit Delete View for Books
-class Book DeleteView(generics.DestroyAPIView):
+class BookDeleteView(generics.DestroyAPIView):
     """
     API view to delete a book.
     Only authenticated users can delete books.
@@ -34,7 +34,7 @@ class Book DeleteView(generics.DestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 # Explicit Create View for Authors
-class Author CreateView(generics.CreateAPIView):
+class AuthorCreateView(generics.CreateAPIView):
     """
     API view to create a new author.
     Only authenticated users can create authors.
@@ -44,7 +44,7 @@ class Author CreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 # Explicit Update View for Authors
-class Author UpdateView(generics.UpdateAPIView):
+class AuthorUpdateView(generics.UpdateAPIView):
     """
     API view to update an existing author.
     Only authenticated users can update authors.
@@ -54,7 +54,7 @@ class Author UpdateView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 # Explicit Delete View for Authors
-class Author DeleteView(generics.DestroyAPIView):
+class AuthorDeleteView(generics.DestroyAPIView):
     """
     API view to delete an author.
     Only authenticated users can delete authors.
