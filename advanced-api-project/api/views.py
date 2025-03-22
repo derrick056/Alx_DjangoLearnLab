@@ -1,43 +1,63 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, permissions
 from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
 
-# Book Views
-class BookListView(generics.ListCreateAPIView):
+# Explicit Create View for Books
+class Book CreateView(generics.CreateAPIView):
     """
-    API view to retrieve a list of books or create a new one.
-    Allows filtering and searching by title, and ordering by title or publication year.
-    """
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filter_backends = [filters.OrderingFilter, filters.SearchFilter]
-    ordering_fields = ['title', 'publication_year']
-    search_fields = ['title']
-
-class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API view to retrieve, update, or delete a specific book.
-    Only authenticated users can modify books, but anyone can view them.
+    API view to create a new book.
+    Only authenticated users can create books.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-# Author Views
-class AuthorListView(generics.ListCreateAPIView):
+# Explicit Update View for Books
+class Book UpdateView(generics.UpdateAPIView):
     """
-    API view to retrieve a list of authors or create a new one.
+    API view to update an existing book.
+    Only authenticated users can update books.
+    """
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+# Explicit Delete View for Books
+class Book DeleteView(generics.DestroyAPIView):
+    """
+    API view to delete a book.
+    Only authenticated users can delete books.
+    """
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+# Explicit Create View for Authors
+class Author CreateView(generics.CreateAPIView):
+    """
+    API view to create a new author.
+    Only authenticated users can create authors.
     """
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
-class AuthorDetailView(generics.RetrieveUpdateDestroyAPIView):
+# Explicit Update View for Authors
+class Author UpdateView(generics.UpdateAPIView):
     """
-    API view to retrieve, update, or delete an author.
-    Only authenticated users can modify authors, but anyone can view them.
+    API view to update an existing author.
+    Only authenticated users can update authors.
+    """
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+# Explicit Delete View for Authors
+class Author DeleteView(generics.DestroyAPIView):
+    """
+    API view to delete an author.
+    Only authenticated users can delete authors.
     """
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
