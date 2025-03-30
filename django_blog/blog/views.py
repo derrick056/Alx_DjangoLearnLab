@@ -3,6 +3,40 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
+from django.views import View
+from .forms import UserRegisterForm, UserUpdateForm
+
+class RegisterView(View):
+    def get(self, request):
+        form = UserRegisterForm()
+        return render(request, 'blog/register.html', {'form': form})
+
+    def post(self, request):
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('post-list')  # Redirect to homepage
+        return render(request, 'blog/register.html', {'form': form})
+
+class ProfileView(View):
+    @login_required
+    def get(self, request):
+        form = UserUpdateForm(instance=request.user)
+        return render(request, 'blog/profile.html', {'form': form})
+
+    @login_required
+    def post(self, request):
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+        return render(request, 'blog/profile.html', {'form': form})
 
 # ListView - Display all blog posts
 class PostListView(ListView):
