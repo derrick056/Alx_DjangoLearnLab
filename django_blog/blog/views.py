@@ -5,7 +5,6 @@ from .models import Post
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.views import View
@@ -25,13 +24,15 @@ class RegisterView(View):
         return render(request, 'blog/register.html', {'form': form})
 
 class ProfileView(View):
-    @login_required
     def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('login')
         form = UserUpdateForm(instance=request.user)
         return render(request, 'blog/profile.html', {'form': form})
 
-    @login_required
     def post(self, request):
+        if not request.user.is_authenticated:
+            return redirect('login')
         form = UserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
