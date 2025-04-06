@@ -1,10 +1,10 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 from rest_framework.authtoken.models import Token
 
-from .serializers import RegisterSerializer, LoginSerializer
+from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from .models import CustomUser
 
 class RegisterView(APIView):
@@ -46,3 +46,12 @@ class UnfollowUserView(APIView):
             return Response({'detail': 'You cannot unfollow yourself.'}, status=status.HTTP_400_BAD_REQUEST)
         request.user.following.remove(target_user)
         return Response({'detail': f'You have unfollowed {target_user.username}.'}, status=status.HTTP_200_OK)
+    
+class UserListView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+    def get(self, request):
+        users = self.get_queryset()
+        serializer = self.get_serializer(users, many=True)
+        return Response(serializer.data)
